@@ -3,7 +3,7 @@ import smtplib
 from email.mime.text import MIMEText
 
 # Title for the landing page
-st.title("Welcome to StyleMe")
+st.title("Welcome to StyleMe!")
 
 # Initialize session state to store users if it doesn't already exist
 if 'users' not in st.session_state:
