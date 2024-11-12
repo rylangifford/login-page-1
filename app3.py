@@ -2,29 +2,30 @@ import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
 
+# Title for the landing page
+st.title("Welcome to StyleMe")
+
 # Initialize session state to store users if it doesn't already exist
 if 'users' not in st.session_state:
     st.session_state['users'] = {}
-if 'page' not in st.session_state:
-    st.session_state['page'] = "home"  # Default to home page
 
 # Email credentials (replace with your actual email server credentials)
 EMAIL_ADDRESS = "your-email@example.com"
 EMAIL_PASSWORD = "your-email-password"
 
+# Define main function for landing page
+def main():
+    # Landing page options
+    choice = st.radio("What would you like to do?", ("Create an Account", "Login to an Account"))
+
+    # Direct user based on their choice
+    if choice == "Create an Account":
+        create_account()
+    elif choice == "Login to an Account":
+        login()
+
 # Function to create an account
 def create_account():
-    # Light blue background for create account page
-    st.markdown(
-        """
-        <style>
-        body {
-            background-color: #ADD8E6;
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
-    
     st.subheader("Create an Account")
     new_username = st.text_input("Create Username")
     new_password = st.text_input("Create Password", type="password")
@@ -39,26 +40,14 @@ def create_account():
                     "password": new_password,
                     "email": email
                 }
-                st.success("Account created successfully!")
-                st.balloons()
-                st.session_state['page'] = "login"  # Redirect to login page
-                st.experimental_rerun()  # Refresh to show login page
+                st.success("Account created successfully! Redirecting to login page...")
+                st.balloons()  # Display confetti
+                st.experimental_rerun()  # Redirect to the login page
         else:
             st.warning("Please enter a username, password, and email address.")
 
 # Function for login
 def login():
-    # Light blue background for login page
-    st.markdown(
-        """
-        <style>
-        body {
-            background-color: #ADD8E6;
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
-
     st.subheader("Login to Your Account")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
@@ -72,8 +61,7 @@ def login():
 
     # Forgot username/password option
     if st.button("Forgot Username/Password?"):
-        st.session_state['page'] = "recover"  # Go to recovery page
-        st.experimental_rerun()
+        forgot_password()
 
 # Function for forgot username/password page
 def forgot_password():
@@ -107,20 +95,6 @@ def send_recovery_email(email, username, password):
         server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
         server.sendmail(EMAIL_ADDRESS, email, msg.as_string())
 
-# Main navigation
-if st.session_state['page'] == "home":
-    choice = st.radio("What would you like to do?", ("Create an Account", "Login to an Account"))
-    if choice == "Create an Account":
-        st.session_state['page'] = "create"
-    elif choice == "Login to an Account":
-        st.session_state['page'] = "login"
-    st.experimental_rerun()
-
-elif st.session_state['page'] == "create":
-    create_account()
-
-elif st.session_state['page'] == "login":
-    login()
-
-elif st.session_state['page'] == "recover":
-    forgot_password()
+# Run the main function
+if __name__ == "__main__":
+    main()
