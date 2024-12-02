@@ -15,19 +15,19 @@ if 'account_created' not in st.session_state:
 EMAIL_ADDRESS = "your-email@example.com"
 EMAIL_PASSWORD = "your-email-password"
 
+# Global red background styling
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #FF0000;
+    }
+    </style>
+    """, unsafe_allow_html=True
+)
+
 # Function to create an account
 def create_account():
-    # Light blue background for create account page
-    st.markdown(
-        """
-        <style>
-        body {
-            background-color: #ADD8E6;
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
-    
     st.subheader("Create an Account")
     new_username = st.text_input("Create Username")
     new_password = st.text_input("Create Password", type="password")
@@ -49,17 +49,6 @@ def create_account():
 
 # Function for login
 def login():
-    # Light blue background for login page
-    st.markdown(
-        """
-        <style>
-        body {
-            background-color: #ADD8E6;
-        }
-        </style>
-        """, unsafe_allow_html=True
-    )
-
     st.subheader("Login to Your Account")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
@@ -90,6 +79,7 @@ def forgot_password():
         if user_found:
             send_recovery_email(recovery_email, user_found[0], user_found[1])
             st.success("Recovery email sent! Check your inbox.")
+            st.info("An email with username/password recovery instructions has been sent to the email you provided.")
         else:
             st.error("No account found with that email address.")
 
